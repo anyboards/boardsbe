@@ -1,0 +1,12 @@
+version: "3"
+
+tasks:
+  tools:
+    cmds:
+      - go install github.com/cosmtrek/air
+  envoy:
+    cmd: envoy --config-path envoy.yaml
+  air:
+    cmd: sleep 1 && air -c .air.toml
+  dev:
+    cmd: task --parallel envoy air
