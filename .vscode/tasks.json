@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "devenv",
+            "command": "task",
+            "args": ["-t", "Taskfile.dev.yaml", "env"]
+        },
+        {
+            "label": "stopdevenv",
+            "command": "task",
+            "args": ["-t", "Taskfile.dev.yaml", "stopenv"]
+        }
+    ]
+}

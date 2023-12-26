@@ -1,0 +1,7 @@
+# section only presented in dev config and not in deployment one
+dev:
+  app_port: 1111
+  envoy_docker_port: 8080
+
+grpc_server:
+  port: 4444

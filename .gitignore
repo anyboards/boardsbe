@@ -1,3 +1,4 @@
 vendor
 bin
 tmp
+config/envoy.dev.yaml

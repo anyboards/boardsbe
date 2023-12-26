@@ -49,7 +49,7 @@ func newServer() *boardsServer {
 }
 
 func main() {
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", 2222))
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", 4444))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

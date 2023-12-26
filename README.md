@@ -1,6 +1,16 @@
 # Boards Backend
 
-## Install Go
+Real motherfucking backend
+
+## Development Tools
+
+Before start development install following tools
+
+### Taskfile
+
+Taskfile used instead of Makefile. Download here https://taskfile.dev
+
+### Go
 
 I recommend to install Go via `Go Version Manager` so you can easily upgrade Go version if needed
 
@@ -9,6 +19,8 @@ Install `Go Version Manager` (code taken from https://github.com/moovweb/gvm#ins
 ```bash
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 ```
+
+Restart terminal
 
 Install latest Go version. Versions can be taken from https://go.dev/dl. Latest version at the moment of writing this readme is `go1.21.5`
 
@@ -36,7 +48,7 @@ Then select installed Go version
 gvm use go1.21.5
 ```
 
-Validate Go installed version in use
+Validate Go installed version using
 
 ```bash
 go version
@@ -44,5 +56,31 @@ go version
 ### Output
 
 go version go1.21.5 darwin/arm64
+```
+
+## Development
+
+Development process described for `VS Code`
+
+### VS Code
+
+Install Go plugin https://marketplace.visualstudio.com/items?itemName=golang.Go
+
+After installation run `Dev` launch configurations. It will start development environment and debug session
+
+Development environment can be run by hand
+```bash
+task -t Taskfile.dev.yaml env
+```
+In this case use `App` launch configuration. Development containers should be also stopped by hand
+```bash
+task -t Taskfile.dev.yaml stopenv
+```
+
+### `grpcui`
+
+To run web ui for gRPC run 
+```bash
+task -t Taskfile.dev.yaml grpcui
 ```
 
