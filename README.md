@@ -12,9 +12,9 @@ Taskfile used instead of Makefile. Download here https://taskfile.dev
 
 ### Go
 
-I recommend to install Go via `Go Version Manager` so you can easily upgrade Go version if needed
+I recommend to install Go via Go Version Manager so you can easily upgrade Go version if needed
 
-Install `Go Version Manager` (code taken from https://github.com/moovweb/gvm#installing)
+Install Go Version Manager (code taken from https://github.com/moovweb/gvm#installing)
 
 ```bash
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
@@ -60,13 +60,17 @@ go version go1.21.5 darwin/arm64
 
 ## Development
 
-Development process described for `VS Code`
+Development process described for VS Code
 
 ### VS Code
 
 Install Go plugin https://marketplace.visualstudio.com/items?itemName=golang.Go
 
-After installation run `Dev` launch configurations. It will start development environment and debug session
+#### `Dev` launch configuration
+
+This launch configuration starts development environment and debug session
+
+#### `App` launch configuration
 
 Development environment can be run by hand
 ```bash
