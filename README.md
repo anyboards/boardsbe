@@ -72,11 +72,11 @@ This launch configuration starts development environment and debug session
 
 #### `App` launch configuration
 
-Development environment can be run by hand
+Development environment should be run by hand
 ```bash
 task -t Taskfile.dev.yaml env
 ```
-In this case use `App` launch configuration. Development containers should be also stopped by hand
+Development containers should be also stopped by hand
 ```bash
 task -t Taskfile.dev.yaml stopenv
 ```
