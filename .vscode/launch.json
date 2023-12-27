@@ -6,17 +6,17 @@
     "configurations": [
         // Run `task devenv` before main.go and `task stopdev` after main.go
         {
-            "name": "Dev",
+            "name": "Env + Server",
             "type": "go",
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/main.go",
-            "preLaunchTask": "devenv",
-            "postDebugTask": "stopdevenv",
+            "preLaunchTask": "dev.env",
+            "postDebugTask": "dev.env.stop",
         },
         // Run main.go only. `task devenv` should be run manually
         {
-            "name": "App",
+            "name": "Server",
             "type": "go",
             "request": "launch",
             "mode": "auto",

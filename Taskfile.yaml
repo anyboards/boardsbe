@@ -1,0 +1,39 @@
+version: "3"
+
+vars:
+  YQ: docker run --rm -v .:/boardsbe mikefarah/yq
+
+tasks:
+  dev.env:
+    cmds:
+      - task: dev.env.envoy
+
+  dev.env.stop:
+    cmds:
+      - task: dev.env.envoy.stop
+
+  dev.env.envoy:
+    vars:
+      DOCKER_IMAGE: envoyproxy/envoy:v1.28-latest
+      PUBLISH_PORT:
+        sh: "{{.YQ}} '.dev.envoy_docker.publish_port' /boardsbe/config/dev.yaml"
+      DOCKER_PORT:
+        sh: "{{.YQ}} '.dev.envoy_docker.docker_port' /boardsbe/config/dev.yaml"
+      GRPC_SERVER_PORT:
+        sh: "{{.YQ}} '.grpc_server.port' /boardsbe/config/dev.yaml"
+    cmds:
+      - cp config/envoy.dev.example.yaml config/envoy.dev.yaml
+      - "{{.YQ}} --inplace '.static_resources.listeners[0].address.socket_address.port_value = {{.DOCKER_PORT}}'  /boardsbe/config/envoy.dev.yaml"
+      - "{{.YQ}} --inplace '.static_resources.clusters[0].load_assignment.endpoints[0].lb_endpoints[0].endpoint.address.socket_address.port_value = {{.GRPC_SERVER_PORT}}' /boardsbe/config/envoy.dev.yaml"
+      - docker run --rm -d --name boardsbe.dev -v ./config/envoy.dev.yaml:/etc/envoy/envoy.yaml -p {{.PUBLISH_PORT}}:{{.DOCKER_PORT}} -e ENVOY_UID=$(id -u) {{.DOCKER_IMAGE}}
+
+  dev.env.envoy.stop: { cmd: docker stop boardsbe.dev }
+
+  dev.proto.update:
+    cmd: go get github.com/anyboards/proto
+
+  grpcui:
+    vars:
+      ENVOY_PUBLISH_PORT:
+        sh: "{{.YQ}} '.dev.envoy_docker.publish_port' /boardsbe/config/dev.yaml"
+    cmd: go run github.com/fullstorydev/grpcui/cmd/grpcui@latest -plaintext localhost:{{.ENVOY_PUBLISH_PORT}}

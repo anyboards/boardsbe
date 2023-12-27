@@ -5,41 +5,25 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"time"
 
 	"github.com/anyboards/proto/gen/go/boards"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type boardsServer struct {
 	boards.UnimplementedBoardsServer
 }
 
-func (*boardsServer) Create(context.Context, *emptypb.Empty) (*boards.CreateBoardResponse, error) {
-	return &boards.CreateBoardResponse{Id: "123"}, nil
+func (*boardsServer) Create(context.Context, *boards.CreateBoardRequest) (*boards.CreateBoardResponse, error) {
+	return &boards.CreateBoardResponse{Board: &boards.Board{Id: "123", Name: "test"}}, nil
 }
 
-func (*boardsServer) ListBoards(ctx context.Context, _ *emptypb.Empty) (*boards.ListBoardsResponse, error) {
-	print("LB")
-	// md, ok := metadata.FromIncomingContext(ctx)
-	// if ok {
-	// 	vv := md.Get("Authorization")
-	// 	// vv = "Bearer ..."
-	// 	print(vv)
-	// }
-
-	return &boards.ListBoardsResponse{Boards: []*boards.ListBoardResponse{
-		{
-			Id:        "123",
-			CreatedAt: timestamppb.New(time.Now()),
-		},
-		{
-			Id:        "4567",
-			CreatedAt: timestamppb.New(time.Now()),
-		},
+func (*boardsServer) ListBoards(context.Context, *emptypb.Empty) (*boards.ListBoardResponse, error) {
+	return &boards.ListBoardResponse{Item: []*boards.ListBoardResponseItem{
+		{Id: "123", Name: "test 1"},
+		{Id: "124", Name: "test 2"},
 	}}, nil
 }
 

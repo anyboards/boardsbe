@@ -3,7 +3,7 @@ module github.com/anyboards/boardsbe
 go 1.21.4
 
 require (
-	github.com/anyboards/proto v0.0.0-20231221221624-0cb75da0f957
+	github.com/anyboards/proto v0.0.0-20231222194623-128eab57906a
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.31.0
 )

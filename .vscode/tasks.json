@@ -2,14 +2,14 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "devenv",
+            "label": "dev.env",
             "command": "task",
-            "args": ["-t", "Taskfile.dev.yaml", "env"]
+            "args": ["dev.env"],
         },
         {
-            "label": "stopdevenv",
+            "label": "dev.env.stop",
             "command": "task",
-            "args": ["-t", "Taskfile.dev.yaml", "stopenv"]
+            "args": ["dev.env.stop"]
         }
     ]
 }
