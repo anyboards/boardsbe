@@ -5,30 +5,44 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"time"
 
-	"github.com/anyboards/proto/gen/go/boards"
+	"github.com/anyboards/proto/gen/go/debug"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
-	"google.golang.org/protobuf/types/known/emptypb"
+	// "google.golang.org/grpc/reflection"
 )
 
-type boardsServer struct {
-	boards.UnimplementedBoardsServer
+type srv struct {
+	debug.UnimplementedDebugServer
 }
 
-func (*boardsServer) Create(context.Context, *boards.CreateBoardRequest) (*boards.CreateBoardResponse, error) {
-	return &boards.CreateBoardResponse{Board: &boards.Board{Id: "123", Name: "test"}}, nil
+func (*srv) Add(_ context.Context, r *debug.AddRequest) (*debug.AddResponse, error) {
+	return &debug.AddResponse{Result: r.A + r.B}, nil
 }
 
-func (*boardsServer) ListBoards(context.Context, *emptypb.Empty) (*boards.ListBoardResponse, error) {
-	return &boards.ListBoardResponse{Item: []*boards.ListBoardResponseItem{
-		{Id: "123", Name: "test 1"},
-		{Id: "124", Name: "test 2"},
-	}}, nil
+func (*srv) Greet(_ context.Context, r *debug.GreetRequest) (*debug.GreetResponse, error) {
+	return &debug.GreetResponse{Greeting: "Hello " + r.Name + "!"}, nil
 }
 
-func newServer() *boardsServer {
-	s := &boardsServer{}
+func (*srv) Stream(r *debug.StreamRequest, dss debug.Debug_StreamServer) error {
+	ticker := time.NewTicker(r.GetInterval().AsDuration())
+	num := 1
+
+	for {
+		select {
+		case <-ticker.C:
+			dss.Send(&debug.StreamResponse{MessageNum: fmt.Sprintf("%d", num)})
+			num += 1
+		case <-dss.Context().Done():
+			return dss.Context().Err()
+		}
+	}
+
+	return nil
+}
+
+func newServer() *srv {
+	s := &srv{}
 	return s
 }
 
@@ -41,7 +55,7 @@ func main() {
 
 	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
-	boards.RegisterBoardsServer(grpcServer, newServer())
-	reflection.Register(grpcServer)
+	debug.RegisterDebugServer(grpcServer, newServer())
+	// reflection.Register(grpcServer)
 	grpcServer.Serve(lis)
 }

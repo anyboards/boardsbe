@@ -1,12 +1,14 @@
 version: "3"
 
 vars:
-  YQ: docker run --rm -v .:/boardsbe mikefarah/yq
+  ENVOY_CONTAINER_NAME: dev.boardsbe.envoy
+  YQ: docker run -i --rm -v .:/boardsbe mikefarah/yq
 
 tasks:
   dev.env:
     cmds:
       - task: dev.env.envoy
+      - cmd: echo "dev env started. run 'task dev.env.stop' to stop"
 
   dev.env.stop:
     cmds:
@@ -23,14 +25,18 @@ tasks:
         sh: "{{.YQ}} '.grpc_server.port' /boardsbe/config/dev.yaml"
     cmds:
       - cp config/envoy.dev.example.yaml config/envoy.dev.yaml
-      - "{{.YQ}} --inplace '.static_resources.listeners[0].address.socket_address.port_value = {{.DOCKER_PORT}}'  /boardsbe/config/envoy.dev.yaml"
+      - "{{.YQ}} --inplace '.static_resources.listeners[0].address.socket_address.port_value = {{.DOCKER_PORT}}' /boardsbe/config/envoy.dev.yaml"
       - "{{.YQ}} --inplace '.static_resources.clusters[0].load_assignment.endpoints[0].lb_endpoints[0].endpoint.address.socket_address.port_value = {{.GRPC_SERVER_PORT}}' /boardsbe/config/envoy.dev.yaml"
-      - docker run --rm -d --name boardsbe.dev -v ./config/envoy.dev.yaml:/etc/envoy/envoy.yaml -p {{.PUBLISH_PORT}}:{{.DOCKER_PORT}} -e ENVOY_UID=$(id -u) {{.DOCKER_IMAGE}}
+      - docker run --rm -d --name {{.ENVOY_CONTAINER_NAME}} -v ./config/envoy.dev.yaml:/etc/envoy/envoy.yaml -p {{.PUBLISH_PORT}}:{{.DOCKER_PORT}} -e ENVOY_UID=$(id -u) {{.DOCKER_IMAGE}}
 
-  dev.env.envoy.stop: { cmd: docker stop boardsbe.dev }
+  dev.env.envoy.stop:
+    cmd: docker stop {{.ENVOY_CONTAINER_NAME}}
 
   dev.proto.update:
-    cmd: go get github.com/anyboards/proto
+    vars:
+      LATEST_COMMIT:
+        sh: curl -s "https://api.github.com/repos/anyboards/proto/commits" | {{.YQ}} -r '.[0].sha'
+    cmd: go get github.com/anyboards/proto@{{.LATEST_COMMIT}}
 
   grpcui:
     vars:
