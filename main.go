@@ -9,7 +9,7 @@ import (
 
 	"github.com/anyboards/proto/gen/go/debug"
 	"google.golang.org/grpc"
-	// "google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/reflection"
 )
 
 type srv struct {
@@ -56,6 +56,6 @@ func main() {
 	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
 	debug.RegisterDebugServer(grpcServer, newServer())
-	// reflection.Register(grpcServer)
+	reflection.Register(grpcServer)
 	grpcServer.Serve(lis)
 }

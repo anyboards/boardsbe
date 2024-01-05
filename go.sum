@@ -1,5 +1,3 @@
-github.com/anyboards/proto v0.0.0-20240104212342-12140db02daf h1:6IH3bxyxEG0vSBN9NWabB+27n+TmcTvFj185d52c42A=
-github.com/anyboards/proto v0.0.0-20240104212342-12140db02daf/go.mod h1:sv5nVswLjb4YTpti0xjUg6xSHzbxCdbwtrTFVxXNpkk=
 github.com/anyboards/proto v0.0.0-20240105001327-617e291da2b2 h1:hXxWQQ8Hfw+ji3qFwF4zJa6opzzs40tEkCwlLexsFLA=
 github.com/anyboards/proto v0.0.0-20240105001327-617e291da2b2/go.mod h1:sv5nVswLjb4YTpti0xjUg6xSHzbxCdbwtrTFVxXNpkk=
 github.com/golang/protobuf v1.5.0/go.mod h1:FsONVRAS9T7sI+LIUmWTfcYkHO4aIWwzhcaSAoJOfIk=
